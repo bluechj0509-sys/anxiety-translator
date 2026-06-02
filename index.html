@@ -18,7 +18,7 @@
     --surface: #120a1e;
     --border: #2a1a3e;
     --text: #D4C5E8;
-    --muted: #7B5EA7;
+    --muted: #B89FD8;
   }
 
   html { scroll-behavior: smooth; }
@@ -561,7 +561,7 @@
 </div>
 
 <script>
-  const API_URL = 'http://localhost:3001';
+  const API_URL = "";
   let analysisResult = null;
 
   function updateCount() {
@@ -577,7 +577,7 @@
     document.getElementById('loadingSection').classList.add('active');
 
     try {
-      const res = await fetch(`${API_URL}/api/translate`, {
+      const res = await fetch(`/api/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ anxiety: text, email: 'temp@temp.com' })
@@ -620,7 +620,7 @@
     const text = document.getElementById('anxietyText').value.trim();
 
     try {
-      const res = await fetch(`${API_URL}/api/translate`, {
+      const res = await fetch(`/api/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ anxiety: text, email })
