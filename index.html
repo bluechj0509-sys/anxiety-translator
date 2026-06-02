@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>불안 번역기 by MAMARU</title>
+<title>Anxiety Translator by MAMARU</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -460,10 +460,10 @@
 
 <div class="page">
   <header>
-    <img src="moru.jpg" alt="모루" class="moru-img" id="moruImg" onerror="this.style.display='none'">
+    <img src="moru.jpg" alt="Moru" class="moru-img" id="moruImg" onerror="this.style.display='none'">
     <p class="brand">by MAMARU</p>
-    <h1>불안 번역기</h1>
-    <p class="subtitle">모루에게 당신의 걱정을 털어놓으세요.<br>치유의 색채가 당신을 찾아와 불안을 씻어줄 거예요.</p>
+    <h1>Anxiety Translator</h1>
+    <p class="subtitle">Tell Moru what is weighing on you.<br>A healing color will find you and wash your anxiety away.</p>
   </header>
 
   <div class="main-card">
@@ -471,20 +471,20 @@
     <!-- INPUT -->
     <div id="inputSection">
       <div class="input-section">
-        <label class="input-label">모루에게 불안을 전해주세요</label>
-        <textarea id="anxietyText" placeholder="모루에게 마음속에 있는 고민을 털어놓아 보세요..." maxlength="500" oninput="updateCount()"></textarea>
+        <label class="input-label">Share your anxiety with Moru</label>
+        <textarea id="anxietyText" placeholder="Tell Moru what is on your mind..." maxlength="500" oninput="updateCount()"></textarea>
         <div class="char-count"><span id="charCount">0</span>/500</div>
       </div>
       <button class="btn-translate" onclick="startTranslation()" id="translateBtn">
         <span class="shimmer"></span>
-        내 불안감을 번역해 주세요 ✨
+        Translate my anxiety ✨
       </button>
     </div>
 
     <!-- LOADING -->
     <div class="loading" id="loadingSection">
       <div class="orb"></div>
-      <p class="loading-text">모루가 당신의 걱정을 흡수했습니다.<br>이제 치유가 시작됩니다...</p>
+      <p class="loading-text">Moru has absorbed your worry.<br>The healing begins now...</p>
     </div>
 
     <!-- RESULT -->
@@ -496,22 +496,22 @@
       </div>
 
       <div class="message-card">
-        <p class="msg-label">🌙 정화의 언어</p>
+        <p class="msg-label">🌙 Poetic healing</p>
         <p class="msg-text" id="poeticMsg"></p>
       </div>
 
       <div class="message-card">
-        <p class="msg-label">🧠 뇌과학이 말하는 것</p>
+        <p class="msg-label">🧠 What neuroscience says</p>
         <p class="msg-text" id="sciMsg"></p>
       </div>
 
       <div class="message-card">
-        <p class="msg-label">🤍 침묵의 언어</p>
+        <p class="msg-label">🤍 In silence</p>
         <p class="msg-text" id="silentMsg"></p>
       </div>
 
       <div class="number-card">
-        <p class="num-label">오늘의 수비학 숫자</p>
+        <p class="num-label">Today's numerology number</p>
         <p class="num-big" id="numBig"></p>
         <p class="num-meaning" id="numMeaning"></p>
         <p class="num-msg" id="numMsg"></p>
@@ -519,12 +519,12 @@
 
       <!-- EMAIL -->
       <div class="email-section" id="emailSection">
-        <p class="email-title">✨ 거의 다 왔어요</p>
-        <p class="email-sub">이메일로 치유 결과와 오늘의 수비학 메시지를 받아보세요. 모루가 직접 전달해 드릴게요.</p>
-        <input type="email" id="emailInput" placeholder="이메일 주소를 입력해주세요">
-        <div class="sent-success" id="sentSuccess">📬 이메일이 발송되었어요! 받은 편지함을 확인해주세요.</div>
-        <button class="btn-send" onclick="sendEmail()" id="sendBtn">치유 결과 보내주세요 💜</button>
-        <p class="privacy">개인정보는 치유 결과 전달 목적으로만 사용됩니다</p>
+        <p class="email-title">✨ Almost there</p>
+        <p class="email-sub">Receive your healing color, purification message and numerology reading by email. Moru will deliver it personally.</p>
+        <input type="email" id="emailInput" placeholder="Enter your email address">
+        <div class="sent-success" id="sentSuccess">📬 Email sent! Please check your inbox.</div>
+        <button class="btn-send" onclick="sendEmail()" id="sendBtn">Send my healing results 💜</button>
+        <p class="privacy">Your email is used only to deliver your healing results</p>
       </div>
     </div>
 
@@ -532,32 +532,32 @@
     <div class="thankyou" id="thankyouSection">
       <div class="ty-card">
         <p style="font-size:40px; margin-bottom:16px;">🐰</p>
-        <p class="ty-title">감사합니다 ♡</p>
-        <p class="ty-sub">치유의 결과가 곧 나타날 거예요. 모루는 평화를 향해<br>한 걸음 나아간 당신을 자랑스럽게 생각합니다.</p>
+        <p class="ty-title">Thank you ♡</p>
+        <p class="ty-sub">Your healing is on its way. Moru is proud of you for taking one step toward peace.</p>
       </div>
 
       <div class="upsell-card">
-        <p class="upsell-badge">✦ 특별 제안 ✦</p>
-        <p class="upsell-title">심층 치유 패키지</p>
-        <p class="upsell-desc">모루와 함께하는 더 깊은 치유 여정.<br>당신만을 위한 맞춤형 치유 프로그램이에요.</p>
+        <p class="upsell-badge">✦ Special Offer ✦</p>
+        <p class="upsell-title">Deep Healing Package</p>
+        <p class="upsell-desc">A deeper healing journey with Moru — a personalized program made just for you.</p>
         <ul class="features">
-          <li>7일간의 치유 명상 계획</li>
-          <li>맞춤형 색채 치료 가이드</li>
-          <li>확장된 정화 의식</li>
-          <li>개인 맞춤형 치유 확언</li>
+          <li>7-day healing meditation plan</li>
+          <li>Personalized color therapy guide</li>
+          <li>Extended purification ritual</li>
+          <li>Personalized healing affirmations</li>
         </ul>
         <div class="price-row">
           <p class="price">$19</p>
-          <p class="price-sub">일회성 결제</p>
+          <p class="price-sub">one-time payment</p>
         </div>
-        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5" class="btn-upsell" target="_blank">더욱 깊은 치유의 문을 열어보세요 ✨</a>
-        <button class="btn-reset" onclick="resetApp()">다시 시작하기</button>
+        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5" class="btn-upsell" target="_blank">Open the door to deeper healing ✨</a>
+        <button class="btn-reset" onclick="resetApp()">Start again</button>
       </div>
     </div>
 
   </div>
 
-  <footer>불안 번역기 by MAMARU · @anxiety_translator</footer>
+  <footer>Anxiety Translator by MAMARU · @anxiety_translator</footer>
 </div>
 
 <script>
@@ -571,7 +571,7 @@
 
   async function startTranslation() {
     const text = document.getElementById('anxietyText').value.trim();
-    if (!text) { alert('불안을 입력해주세요'); return; }
+    if (!text) { alert('Please enter your anxiety'); return; }
 
     document.getElementById('inputSection').style.display = 'none';
     document.getElementById('loadingSection').classList.add('active');
@@ -590,7 +590,7 @@
 
       document.getElementById('colorBall').style.background = data.color.hex;
       document.getElementById('colorBall').style.boxShadow = `0 0 40px ${data.color.hex}66`;
-      document.getElementById('colorName').textContent = `${data.color.emoji} 오늘 당신의 치유 색은 ${data.color.name}`;
+      document.getElementById('colorName').textContent = `${data.color.emoji} Your healing color today is ${data.color.name}`;
       document.getElementById('colorRoot').textContent = data.root;
       document.getElementById('poeticMsg').textContent = data.poetic;
       document.getElementById('sciMsg').textContent = data.scientific;
@@ -605,17 +605,17 @@
     } catch (err) {
       document.getElementById('loadingSection').classList.remove('active');
       document.getElementById('inputSection').style.display = 'block';
-      alert('오류가 발생했어요. 잠시 후 다시 시도해주세요.');
+      alert('An error occurred. Please try again.');
     }
   }
 
   async function sendEmail() {
     const email = document.getElementById('emailInput').value.trim();
-    if (!email) { alert('이메일을 입력해주세요'); return; }
+    if (!email) { alert('Please enter your email'); return; }
 
     const btn = document.getElementById('sendBtn');
     btn.disabled = true;
-    btn.textContent = '발송 중...';
+    btn.textContent = 'Sending...';
 
     const text = document.getElementById('anxietyText').value.trim();
 
@@ -636,8 +636,8 @@
       }
     } catch (err) {
       btn.disabled = false;
-      btn.textContent = '치유 결과 보내주세요 💜';
-      alert('이메일 발송 중 오류가 발생했어요.');
+      btn.textContent = 'Send my healing results 💜';
+      alert('An error occurred. Please try again.');
     }
   }
 
@@ -649,7 +649,7 @@
     document.getElementById('emailInput').value = '';
     document.getElementById('charCount').textContent = '0';
     document.getElementById('sendBtn').disabled = false;
-    document.getElementById('sendBtn').textContent = '치유 결과 보내주세요 💜';
+    document.getElementById('sendBtn').textContent = 'Send my healing results 💜';
     window.scrollTo(0, 0);
   }
 </script>
