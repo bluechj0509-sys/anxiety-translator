@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>불안 번역기 by MAMARU</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #9B59B6;
+    --purple-light: #E8D5FF;
+    --purple-dark: #4a2d6e;
+    --gold: #D4A017;
+    --bg: #06030f;
+    --bg2: #0d0820;
+    --surface: #120a1e;
+    --border: #2a1a3e;
+    --text: #D4C5E8;
+    --muted: #7B5EA7;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(2px 2px at 35% 15%, rgba(200,180,255,0.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 70% 85%, rgba(200,180,255,0.3) 0%, transparent 100%);
+  }
+
+  .glow-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 50%, rgba(100,50,180,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(155,89,182,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 60% 80%, rgba(72,30,120,0.1) 0%, transparent 70%);
+  }
+
+  .page { position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    padding: 60px 20px 40px;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .moru-img {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    object-fit: cover;
+    border: 2px solid var(--purple-dark);
+    box-shadow: 0 0 40px rgba(155,89,182,0.3);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .brand { color: var(--muted); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+
+  h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--purple-light);
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .subtitle { color: var(--muted); font-size: 15px; line-height: 1.8; font-weight: 300; }
+
+  /* MAIN CARD */
+  .main-card {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  .input-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .input-label {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s;
+    min-height: 140px;
+  }
+
+  textarea::placeholder { color: rgba(155,89,182,0.4); }
+  textarea:focus { border-color: var(--purple); }
+
+  .char-count {
+    text-align: right;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 8px;
+    opacity: 0.6;
+  }
+
+  .btn-translate {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #6a3d9a, #9B59B6);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-translate:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,89,182,0.4); }
+  .btn-translate:active { transform: translateY(0); }
+  .btn-translate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .btn-translate .shimmer {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer { to { transform: translateX(100%); } }
+
+  /* LOADING */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .loading.active { display: block; }
+
+  .orb {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background: radial-gradient(circle at 30% 30%, #c084fc, #7c3aed, #4c1d95);
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(124,58,237,0.5);
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(124,58,237,0.5); }
+    50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(124,58,237,0.7); }
+  }
+
+  .loading-text { color: var(--muted); font-size: 15px; line-height: 1.8; font-style: italic; }
+
+  /* RESULT */
+  .result { display: none; }
+  .result.active { display: block; }
+
+  .color-reveal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .color-ball {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    transition: background 0.5s;
+  }
+
+  .color-name { font-family: 'Noto Serif KR', serif; font-size: 22px; color: var(--purple-light); margin-bottom: 8px; }
+  .color-root { color: var(--muted); font-size: 13px; letter-spacing: 1px; }
+
+  .message-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .msg-label {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .msg-text {
+    color: var(--text);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  .number-card {
+    background: linear-gradient(135deg, #1a140a, #2a1e0a);
+    border: 1px solid #4e3d0e;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .num-label { color: #7a6030; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .num-big { color: var(--gold); font-size: 56px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+  .num-meaning { color: #a08030; font-size: 13px; margin-bottom: 12px; }
+  .num-msg { color: #c4a030; font-size: 14px; line-height: 1.8; font-style: italic; }
+
+  /* EMAIL SECTION */
+  .email-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .email-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    color: var(--purple-light);
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+
+  .email-sub { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 20px; }
+
+  input[type="email"] {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+    margin-bottom: 12px;
+  }
+
+  input[type="email"]:focus { border-color: var(--purple); }
+  input[type="email"]::placeholder { color: rgba(155,89,182,0.4); }
+
+  .btn-send {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #6a3d9a, #9B59B6);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-send:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,89,182,0.4); }
+  .btn-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .privacy { color: var(--muted); font-size: 11px; text-align: center; margin-top: 12px; opacity: 0.7; }
+
+  /* THANK YOU */
+  .thankyou { display: none; }
+  .thankyou.active { display: block; }
+
+  .ty-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .ty-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    color: var(--purple-light);
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+
+  .ty-sub { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 0; }
+
+  .upsell-card {
+    background: linear-gradient(135deg, #150e25, #1e1035);
+    border: 1px solid var(--purple-dark);
+    border-radius: 20px;
+    padding: 32px;
+    text-align: center;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  .upsell-badge {
+    display: inline-block;
+    background: rgba(155,89,182,0.2);
+    color: var(--purple);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid var(--purple-dark);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .upsell-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    color: var(--purple-light);
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .upsell-desc { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 20px; }
+
+  .features { list-style: none; margin-bottom: 28px; }
+
+  .features li {
+    color: #b8a0d4;
+    font-size: 14px;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .features li::before { content: '✦'; color: var(--purple); font-size: 10px; }
+
+  .price-row { margin-bottom: 20px; }
+  .price { color: var(--purple-light); font-size: 36px; font-weight: 600; }
+  .price-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .btn-upsell {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #7B5EA7, #9B59B6);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-upsell:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(155,89,182,0.5); }
+
+  .btn-reset {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--muted);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 12px;
+  }
+
+  .btn-reset:hover { border-color: var(--purple); color: var(--purple-light); }
+
+  .sent-success {
+    display: none;
+    background: rgba(155,89,182,0.1);
+    border: 1px solid var(--purple-dark);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    color: var(--purple-light);
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .sent-success.active { display: block; }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="glow-bg"></div>
+
+<div class="page">
+  <header>
+    <img src="moru.jpg" alt="모루" class="moru-img" id="moruImg" onerror="this.style.display='none'">
+    <p class="brand">by MAMARU</p>
+    <h1>불안 번역기</h1>
+    <p class="subtitle">모루에게 당신의 걱정을 털어놓으세요.<br>치유의 색채가 당신을 찾아와 불안을 씻어줄 거예요.</p>
+  </header>
+
+  <div class="main-card">
+
+    <!-- INPUT -->
+    <div id="inputSection">
+      <div class="input-section">
+        <label class="input-label">모루에게 불안을 전해주세요</label>
+        <textarea id="anxietyText" placeholder="모루에게 마음속에 있는 고민을 털어놓아 보세요..." maxlength="500" oninput="updateCount()"></textarea>
+        <div class="char-count"><span id="charCount">0</span>/500</div>
+      </div>
+      <button class="btn-translate" onclick="startTranslation()" id="translateBtn">
+        <span class="shimmer"></span>
+        내 불안감을 번역해 주세요 ✨
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loadingSection">
+      <div class="orb"></div>
+      <p class="loading-text">모루가 당신의 걱정을 흡수했습니다.<br>이제 치유가 시작됩니다...</p>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result" id="resultSection">
+      <div class="color-reveal">
+        <div class="color-ball" id="colorBall"></div>
+        <p class="color-name" id="colorName"></p>
+        <p class="color-root" id="colorRoot"></p>
+      </div>
+
+      <div class="message-card">
+        <p class="msg-label">🌙 정화의 언어</p>
+        <p class="msg-text" id="poeticMsg"></p>
+      </div>
+
+      <div class="message-card">
+        <p class="msg-label">🧠 뇌과학이 말하는 것</p>
+        <p class="msg-text" id="sciMsg"></p>
+      </div>
+
+      <div class="message-card">
+        <p class="msg-label">🤍 침묵의 언어</p>
+        <p class="msg-text" id="silentMsg"></p>
+      </div>
+
+      <div class="number-card">
+        <p class="num-label">오늘의 수비학 숫자</p>
+        <p class="num-big" id="numBig"></p>
+        <p class="num-meaning" id="numMeaning"></p>
+        <p class="num-msg" id="numMsg"></p>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="email-section" id="emailSection">
+        <p class="email-title">✨ 거의 다 왔어요</p>
+        <p class="email-sub">이메일로 치유 결과와 오늘의 수비학 메시지를 받아보세요. 모루가 직접 전달해 드릴게요.</p>
+        <input type="email" id="emailInput" placeholder="이메일 주소를 입력해주세요">
+        <div class="sent-success" id="sentSuccess">📬 이메일이 발송되었어요! 받은 편지함을 확인해주세요.</div>
+        <button class="btn-send" onclick="sendEmail()" id="sendBtn">치유 결과 보내주세요 💜</button>
+        <p class="privacy">개인정보는 치유 결과 전달 목적으로만 사용됩니다</p>
+      </div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div class="thankyou" id="thankyouSection">
+      <div class="ty-card">
+        <p style="font-size:40px; margin-bottom:16px;">🐰</p>
+        <p class="ty-title">감사합니다 ♡</p>
+        <p class="ty-sub">치유의 결과가 곧 나타날 거예요. 모루는 평화를 향해<br>한 걸음 나아간 당신을 자랑스럽게 생각합니다.</p>
+      </div>
+
+      <div class="upsell-card">
+        <p class="upsell-badge">✦ 특별 제안 ✦</p>
+        <p class="upsell-title">심층 치유 패키지</p>
+        <p class="upsell-desc">모루와 함께하는 더 깊은 치유 여정.<br>당신만을 위한 맞춤형 치유 프로그램이에요.</p>
+        <ul class="features">
+          <li>7일간의 치유 명상 계획</li>
+          <li>맞춤형 색채 치료 가이드</li>
+          <li>확장된 정화 의식</li>
+          <li>개인 맞춤형 치유 확언</li>
+        </ul>
+        <div class="price-row">
+          <p class="price">$19</p>
+          <p class="price-sub">일회성 결제</p>
+        </div>
+        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5" class="btn-upsell" target="_blank">더욱 깊은 치유의 문을 열어보세요 ✨</a>
+        <button class="btn-reset" onclick="resetApp()">다시 시작하기</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>불안 번역기 by MAMARU · @anxiety_translator</footer>
+</div>
+
+<script>
+  const API_URL = 'http://localhost:3001';
+  let analysisResult = null;
+
+  function updateCount() {
+    const ta = document.getElementById('anxietyText');
+    document.getElementById('charCount').textContent = ta.value.length;
+  }
+
+  async function startTranslation() {
+    const text = document.getElementById('anxietyText').value.trim();
+    if (!text) { alert('불안을 입력해주세요'); return; }
+
+    document.getElementById('inputSection').style.display = 'none';
+    document.getElementById('loadingSection').classList.add('active');
+
+    try {
+      const res = await fetch(`${API_URL}/api/translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ anxiety: text, email: 'temp@temp.com' })
+      });
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.error);
+
+      analysisResult = data;
+
+      document.getElementById('colorBall').style.background = data.color.hex;
+      document.getElementById('colorBall').style.boxShadow = `0 0 40px ${data.color.hex}66`;
+      document.getElementById('colorName').textContent = `${data.color.emoji} 오늘 당신의 치유 색은 ${data.color.color}`;
+      document.getElementById('colorRoot').textContent = data.root;
+      document.getElementById('poeticMsg').textContent = data.poetic;
+      document.getElementById('sciMsg').textContent = data.scientific;
+      document.getElementById('silentMsg').textContent = data.silent;
+      document.getElementById('numBig').textContent = data.number;
+      document.getElementById('numMeaning').textContent = data.numberInfo.meaning;
+      document.getElementById('numMsg').textContent = data.numberInfo.message;
+
+      document.getElementById('loadingSection').classList.remove('active');
+      document.getElementById('resultSection').classList.add('active');
+
+    } catch (err) {
+      document.getElementById('loadingSection').classList.remove('active');
+      document.getElementById('inputSection').style.display = 'block';
+      alert('오류가 발생했어요. 잠시 후 다시 시도해주세요.');
+    }
+  }
+
+  async function sendEmail() {
+    const email = document.getElementById('emailInput').value.trim();
+    if (!email) { alert('이메일을 입력해주세요'); return; }
+
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true;
+    btn.textContent = '발송 중...';
+
+    const text = document.getElementById('anxietyText').value.trim();
+
+    try {
+      const res = await fetch(`${API_URL}/api/translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ anxiety: text, email })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('emailSection').style.display = 'none';
+        document.getElementById('resultSection').classList.remove('active');
+        document.getElementById('thankyouSection').classList.add('active');
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = '치유 결과 보내주세요 💜';
+      alert('이메일 발송 중 오류가 발생했어요.');
+    }
+  }
+
+  function resetApp() {
+    document.getElementById('inputSection').style.display = 'block';
+    document.getElementById('resultSection').classList.remove('active');
+    document.getElementById('thankyouSection').classList.remove('active');
+    document.getElementById('anxietyText').value = '';
+    document.getElementById('emailInput').value = '';
+    document.getElementById('charCount').textContent = '0';
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('sendBtn').textContent = '치유 결과 보내주세요 💜';
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
