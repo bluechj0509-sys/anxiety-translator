@@ -1,35 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anxiety Translator by MAMARU</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --purple: #9B59B6;
-    --purple-light: #E8D5FF;
-    --purple-dark: #4a2d6e;
-    --gold: #D4A017;
-    --bg: #06030f;
-    --bg2: #0d0820;
-    --surface: #120a1e;
-    --border: #2a1a3e;
-    --text: #D4C5E8;
-    --muted: #B89FD8;
+    --purple: #9B59B6; --purple-light: #E8D5FF; --purple-dark: #4a2d6e;
+    --gold: #D4A017; --bg: #06030f; --surface: #120a1e;
+    --border: #2a1a3e; --text: #D4C5E8; --muted: #B89FD8;
   }
-
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
   .stars {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -42,7 +27,6 @@
       radial-gradient(2px 2px at 35% 15%, rgba(200,180,255,0.4) 0%, transparent 100%),
       radial-gradient(2px 2px at 70% 85%, rgba(200,180,255,0.3) 0%, transparent 100%);
   }
-
   .glow-bg {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background:
@@ -50,420 +34,195 @@
       radial-gradient(ellipse 50% 50% at 80% 20%, rgba(155,89,182,0.06) 0%, transparent 70%),
       radial-gradient(ellipse 40% 60% at 60% 80%, rgba(72,30,120,0.1) 0%, transparent 70%);
   }
-
   .page { position: relative; z-index: 1; }
 
   /* HEADER */
-  header {
-    padding: 60px 20px 40px;
-    text-align: center;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
+  header { padding: 60px 20px 40px; text-align: center; max-width: 500px; margin: 0 auto; }
   .moru-img {
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    margin: 0 auto 24px;
-    object-fit: cover;
-    border: 2px solid var(--purple-dark);
-    box-shadow: 0 0 40px rgba(155,89,182,0.3);
-    animation: float 4s ease-in-out infinite;
+    width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 24px;
+    object-fit: cover; border: 2px solid var(--purple-dark);
+    box-shadow: 0 0 40px rgba(155,89,182,0.3); animation: float 4s ease-in-out infinite;
   }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   .brand { color: var(--muted); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--purple-light); letter-spacing: 1px; margin-bottom: 16px; line-height: 1.2; }
+  .subtitle { color: var(--muted); font-size: 15px; line-height: 1.9; font-weight: 300; }
 
-  h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 36px;
-    font-weight: 300;
-    color: var(--purple-light);
-    letter-spacing: -1px;
-    margin-bottom: 16px;
-    line-height: 1.2;
-  }
+  .main-card { max-width: 500px; margin: 0 auto; padding: 0 20px 80px; }
 
-  .subtitle { color: var(--muted); font-size: 15px; line-height: 1.8; font-weight: 300; }
-
-  /* MAIN CARD */
-  .main-card {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 0 20px 80px;
-  }
-
-  .input-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 28px;
-    margin-bottom: 16px;
-  }
-
-  .input-label {
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: block;
-  }
-
+  /* INPUT */
+  .input-section { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; }
+  .input-label { color: var(--muted); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; display: block; }
   textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    resize: none;
-    outline: none;
-    transition: border-color 0.3s;
-    min-height: 140px;
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; color: var(--text); font-family: 'Noto Sans', sans-serif;
+    font-size: 15px; line-height: 1.7; resize: none; outline: none; transition: border-color 0.3s; min-height: 140px;
   }
-
   textarea::placeholder { color: rgba(155,89,182,0.4); }
   textarea:focus { border-color: var(--purple); }
-
-  .char-count {
-    text-align: right;
-    color: var(--muted);
-    font-size: 11px;
-    margin-top: 8px;
-    opacity: 0.6;
-  }
+  .char-count { text-align: right; color: var(--muted); font-size: 11px; margin-top: 8px; opacity: 0.6; }
 
   .btn-translate {
-    width: 100%;
-    padding: 18px;
-    background: linear-gradient(135deg, #6a3d9a, #9B59B6);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 8px;
-    position: relative;
-    overflow: hidden;
+    width: 100%; padding: 18px; background: linear-gradient(135deg, #6a3d9a, #9B59B6);
+    border: none; border-radius: 50px; color: white; font-family: 'Noto Sans', sans-serif;
+    font-size: 16px; font-weight: 500; letter-spacing: 1px; cursor: pointer; transition: all 0.3s;
+    margin-top: 8px; position: relative; overflow: hidden;
   }
-
   .btn-translate:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,89,182,0.4); }
-  .btn-translate:active { transform: translateY(0); }
   .btn-translate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
   .btn-translate .shimmer {
     position: absolute; inset: 0;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: translateX(-100%);
-    animation: shimmer 2s infinite;
+    transform: translateX(-100%); animation: shimmer 2s infinite;
   }
-
   @keyframes shimmer { to { transform: translateX(100%); } }
 
   /* LOADING */
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 40px;
-  }
-
+  .loading { display: none; text-align: center; padding: 48px 20px; }
   .loading.active { display: block; }
-
-  .orb {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
+  .ritual-circle {
+    width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 28px;
     background: radial-gradient(circle at 30% 30%, #c084fc, #7c3aed, #4c1d95);
-    animation: pulse 2s ease-in-out infinite;
-    box-shadow: 0 0 40px rgba(124,58,237,0.5);
+    animation: ritualPulse 2.5s ease-in-out infinite;
+    box-shadow: 0 0 60px rgba(124,58,237,0.6); position: relative;
   }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(124,58,237,0.5); }
-    50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(124,58,237,0.7); }
+  .ritual-circle::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 1px solid rgba(155,89,182,0.3); animation: ringExpand 2.5s ease-in-out infinite;
   }
+  @keyframes ritualPulse {
+    0%,100% { transform: scale(1); box-shadow: 0 0 60px rgba(124,58,237,0.6); }
+    50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(124,58,237,0.8); }
+  }
+  @keyframes ringExpand { 0%,100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 0; } }
 
-  .loading-text { color: var(--muted); font-size: 15px; line-height: 1.8; font-style: italic; }
+  .ritual-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--purple-light); margin-bottom: 8px; font-weight: 300; font-style: italic; }
+  .ritual-empathy { color: var(--gold); font-size: 14px; font-style: italic; margin-bottom: 20px; min-height: 22px; line-height: 1.6; padding: 0 20px; }
+  .ritual-steps { list-style: none; margin: 0; }
+  .ritual-steps li { color: var(--muted); font-size: 13px; line-height: 2.2; opacity: 0; transition: opacity 0.8s ease; }
+  .ritual-steps li.visible { opacity: 1; }
 
   /* RESULT */
   .result { display: none; }
   .result.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  .color-reveal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
-    text-align: center;
-    margin-bottom: 16px;
-    animation: fadeUp 0.6s ease;
-  }
+  .color-reveal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 16px; animation: fadeUp 0.6s ease; }
+  .color-ball { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; }
+  .color-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--purple-light); margin-bottom: 6px; font-weight: 300; }
+  .color-root { color: var(--muted); font-size: 13px; letter-spacing: 1px; font-style: italic; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .message-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 12px; animation: fadeUp 0.6s ease; }
+  .msg-label { color: var(--muted); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .msg-text { color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 17px; line-height: 1.9; font-weight: 300; font-style: italic; }
 
-  .color-ball {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    transition: background 0.5s;
-  }
-
-  .color-name { font-family: 'Noto Serif KR', serif; font-size: 22px; color: var(--purple-light); margin-bottom: 8px; }
-  .color-root { color: var(--muted); font-size: 13px; letter-spacing: 1px; }
-
-  .message-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 12px;
-    animation: fadeUp 0.6s ease;
-  }
-
-  .msg-label {
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .msg-text {
-    color: var(--text);
-    font-family: 'Noto Serif KR', serif;
-    font-size: 15px;
-    line-height: 1.9;
-    font-weight: 300;
-  }
-
-  .number-card {
-    background: linear-gradient(135deg, #1a140a, #2a1e0a);
-    border: 1px solid #4e3d0e;
-    border-radius: 16px;
-    padding: 28px;
-    text-align: center;
-    margin-bottom: 16px;
-    animation: fadeUp 0.6s ease;
-  }
-
+  .number-card { background: linear-gradient(135deg, #1a140a, #2a1e0a); border: 1px solid #4e3d0e; border-radius: 16px; padding: 28px; text-align: center; margin-bottom: 16px; animation: fadeUp 0.6s ease; }
   .num-label { color: #7a6030; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
-  .num-big { color: var(--gold); font-size: 56px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+  .num-big { color: var(--gold); font-size: 60px; font-weight: 600; line-height: 1; margin-bottom: 4px; font-family: 'Cormorant Garamond', serif; }
   .num-meaning { color: #a08030; font-size: 13px; margin-bottom: 12px; }
-  .num-msg { color: #c4a030; font-size: 14px; line-height: 1.8; font-style: italic; }
+  .num-msg { color: #c4a030; font-size: 15px; line-height: 1.8; font-style: italic; font-family: 'Cormorant Garamond', serif; }
 
-  /* EMAIL SECTION */
-  .email-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 28px;
-    margin-bottom: 16px;
-  }
-
-  .email-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 20px;
-    color: var(--purple-light);
-    margin-bottom: 8px;
-    font-weight: 300;
-  }
-
-  .email-sub { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 20px; }
-
+  /* EMAIL */
+  .email-section { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; }
+  .email-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--purple-light); margin-bottom: 8px; font-weight: 300; }
+  .email-sub { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 20px; }
   input[type="email"] {
-    width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.3s;
-    margin-bottom: 12px;
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: 'Noto Sans', sans-serif;
+    font-size: 15px; outline: none; transition: border-color 0.3s; margin-bottom: 12px;
   }
-
   input[type="email"]:focus { border-color: var(--purple); }
   input[type="email"]::placeholder { color: rgba(155,89,182,0.4); }
-
   .btn-send {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #6a3d9a, #9B59B6);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
+    width: 100%; padding: 16px; background: linear-gradient(135deg, #6a3d9a, #9B59B6);
+    border: none; border-radius: 50px; color: white; font-family: 'Noto Sans', sans-serif;
+    font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s;
   }
-
   .btn-send:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,89,182,0.4); }
   .btn-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .privacy { color: var(--muted); font-size: 11px; text-align: center; margin-top: 12px; opacity: 0.6; }
 
-  .privacy { color: var(--muted); font-size: 11px; text-align: center; margin-top: 12px; opacity: 0.7; }
+  /* HEALING CARD DOWNLOAD */
+  .download-section { animation: fadeUp 0.5s ease; margin-bottom: 16px; }
+  .download-prompt { background: linear-gradient(135deg, #0d1a0d, #0a1a10); border: 1px solid #2a4a2a; border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 12px; }
+  .download-prompt p { color: #7acc7a; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .download-prompt h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #c8f0c8; font-weight: 300; margin-bottom: 16px; }
+
+  /* THE CARD TO DOWNLOAD */
+  #healingCard {
+    background: linear-gradient(160deg, #06030f 0%, #120a1e 50%, #0d0820 100%);
+    border: 1px solid #2a1a3e; border-radius: 20px; padding: 32px 28px;
+    text-align: center; margin-bottom: 16px; position: relative; overflow: hidden;
+  }
+  #healingCard::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(155,89,182,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .card-brand { color: var(--muted); font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; }
+  .card-color-ball { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 14px; }
+  .card-color-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--purple-light); margin-bottom: 4px; font-weight: 300; }
+  .card-root { color: var(--muted); font-size: 12px; font-style: italic; margin-bottom: 20px; }
+  .card-divider { width: 40px; height: 1px; background: var(--border); margin: 0 auto 20px; }
+  .card-poetic { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--text); line-height: 1.8; font-style: italic; margin-bottom: 20px; padding: 0 8px; }
+  .card-num { color: var(--gold); font-size: 36px; font-family: 'Cormorant Garamond', serif; font-weight: 600; margin-bottom: 4px; }
+  .card-num-meaning { color: #a08030; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .card-num-msg { color: #c4a030; font-size: 13px; font-style: italic; font-family: 'Cormorant Garamond', serif; line-height: 1.6; }
+  .card-footer { color: #3a2a4e; font-size: 10px; letter-spacing: 2px; margin-top: 20px; }
+
+  .btn-download {
+    width: 100%; padding: 16px; background: linear-gradient(135deg, #1a3a1a, #2a5a2a);
+    border: 1px solid #3a6a3a; border-radius: 50px; color: #c8f0c8;
+    font-family: 'Noto Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: all 0.3s; margin-bottom: 8px;
+  }
+  .btn-download:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(50,150,50,0.3); }
 
   /* THANK YOU */
   .thankyou { display: none; }
   .thankyou.active { display: block; }
+  .ty-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 28px; text-align: center; margin-bottom: 16px; animation: fadeUp 0.6s ease; }
+  .ty-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--purple-light); margin-bottom: 12px; font-weight: 300; }
+  .ty-sub { color: var(--muted); font-size: 14px; line-height: 1.9; font-style: italic; }
 
-  .ty-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px 28px;
-    text-align: center;
-    margin-bottom: 16px;
-    animation: fadeUp 0.6s ease;
-  }
-
-  .ty-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 24px;
-    color: var(--purple-light);
-    margin-bottom: 12px;
-    font-weight: 300;
-  }
-
-  .ty-sub { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 0; }
-
-  .upsell-card {
-    background: linear-gradient(135deg, #150e25, #1e1035);
-    border: 1px solid var(--purple-dark);
-    border-radius: 20px;
-    padding: 32px;
-    text-align: center;
-    animation: fadeUp 0.6s ease 0.2s both;
-  }
-
-  .upsell-badge {
-    display: inline-block;
-    background: rgba(155,89,182,0.2);
-    color: var(--purple);
-    font-size: 11px;
-    letter-spacing: 2px;
-    padding: 6px 16px;
-    border-radius: 50px;
-    border: 1px solid var(--purple-dark);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-
-  .upsell-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 22px;
-    color: var(--purple-light);
-    margin-bottom: 16px;
-    font-weight: 300;
-  }
-
+  /* UPSELL */
+  .upsell-card { background: linear-gradient(135deg, #150e25, #1e1035); border: 2px solid var(--purple-dark); border-radius: 20px; padding: 32px; text-align: center; animation: fadeUp 0.6s ease 0.2s both; }
+  .upsell-badge { display: inline-block; background: rgba(155,89,182,0.2); color: var(--purple-light); font-size: 10px; letter-spacing: 3px; padding: 6px 18px; border-radius: 50px; border: 1px solid var(--purple-dark); margin-bottom: 20px; text-transform: uppercase; }
+  .upsell-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--purple-light); margin-bottom: 16px; font-weight: 300; }
   .upsell-desc { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 20px; }
-
-  .features { list-style: none; margin-bottom: 28px; }
-
-  .features li {
-    color: #b8a0d4;
-    font-size: 14px;
-    padding: 6px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-  }
-
+  .features { list-style: none; margin-bottom: 24px; }
+  .features li { color: #b8a0d4; font-size: 14px; padding: 6px 0; display: flex; align-items: center; gap: 8px; justify-content: center; }
   .features li::before { content: '✦'; color: var(--purple); font-size: 10px; }
 
-  .price-row { margin-bottom: 20px; }
-  .price { color: var(--purple-light); font-size: 36px; font-weight: 600; }
-  .price-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  /* PRICE ANCHORING */
+  .price-original { color: #6a4a8a; font-size: 18px; text-decoration: line-through; margin-bottom: 4px; }
+  .price-sale { color: var(--purple-light); font-size: 44px; font-weight: 600; font-family: 'Cormorant Garamond', serif; line-height: 1; }
+  .price-tag { display: inline-block; background: rgba(212,160,23,0.15); color: var(--gold); font-size: 11px; letter-spacing: 2px; padding: 4px 12px; border-radius: 50px; border: 1px solid rgba(212,160,23,0.3); margin: 8px 0 6px; }
+  .price-sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
 
-  .btn-upsell {
-    display: block;
-    width: 100%;
-    padding: 18px;
-    background: linear-gradient(135deg, #7B5EA7, #9B59B6);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s;
-    letter-spacing: 0.5px;
-  }
+  /* COUNTDOWN */
+  .countdown-wrap { background: rgba(155,89,182,0.08); border: 1px solid rgba(155,89,182,0.2); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
+  .countdown-label { color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .countdown-timer { color: var(--purple-light); font-size: 30px; font-family: 'Cormorant Garamond', serif; letter-spacing: 4px; }
 
+  .btn-upsell { display: block; width: 100%; padding: 18px; background: linear-gradient(135deg, #7B5EA7, #9B59B6); border: none; border-radius: 50px; color: white; font-family: 'Noto Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.3s; letter-spacing: 0.5px; }
   .btn-upsell:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(155,89,182,0.5); }
 
-  .btn-reset {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    color: var(--muted);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 12px;
-  }
-
+  .btn-reset { display: block; width: 100%; padding: 14px; background: transparent; border: 1px solid var(--border); border-radius: 50px; color: var(--muted); font-family: 'Noto Sans', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.3s; margin-top: 12px; }
   .btn-reset:hover { border-color: var(--purple); color: var(--purple-light); }
 
-  .sent-success {
-    display: none;
-    background: rgba(155,89,182,0.1);
-    border: 1px solid var(--purple-dark);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    color: var(--purple-light);
-    font-size: 14px;
-    margin-bottom: 12px;
-  }
-
-  .sent-success.active { display: block; }
-
-  footer {
-    text-align: center;
-    padding: 20px;
-    color: var(--muted);
-    font-size: 12px;
-    opacity: 0.5;
-  }
+  footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; opacity: 0.5; }
 </style>
 </head>
 <body>
 <div class="stars"></div>
 <div class="glow-bg"></div>
-
 <div class="page">
   <header>
-    <img src="moru.jpg" alt="Moru" class="moru-img" id="moruImg" onerror="this.style.display='none'">
+    <img src="moru.jpg" alt="Moru" class="moru-img" onerror="this.style.display='none'">
     <p class="brand">by MAMARU</p>
     <h1>Anxiety Translator</h1>
-    <p class="subtitle">Tell Moru what is weighing on you.<br>A healing color will find you and wash your anxiety away.</p>
+    <p class="subtitle">Tell Moru what is weighing on you.<br>A healing color will find you.</p>
   </header>
 
   <div class="main-card">
@@ -472,7 +231,7 @@
     <div id="inputSection">
       <div class="input-section">
         <label class="input-label">Share your anxiety with Moru</label>
-        <textarea id="anxietyText" placeholder="Tell Moru what is on your mind..." maxlength="500" oninput="updateCount()"></textarea>
+        <textarea id="anxietyText" placeholder="What is on your mind right now..." maxlength="500" oninput="updateCount()"></textarea>
         <div class="char-count"><span id="charCount">0</span>/500</div>
       </div>
       <button class="btn-translate" onclick="startTranslation()" id="translateBtn">
@@ -483,8 +242,15 @@
 
     <!-- LOADING -->
     <div class="loading" id="loadingSection">
-      <div class="orb"></div>
-      <p class="loading-text">Moru has absorbed your worry.<br>The healing begins now...</p>
+      <div class="ritual-circle"></div>
+      <p class="ritual-title">Moru is translating your anxiety...</p>
+      <p class="ritual-empathy" id="empathyLine"></p>
+      <ul class="ritual-steps" id="ritualSteps">
+        <li>🌙 Absorbing your words into the night...</li>
+        <li>🎨 Finding your healing color...</li>
+        <li>✨ Reading today's numerology energy...</li>
+        <li>🐰 Preparing your purification message...</li>
+      </ul>
     </div>
 
     <!-- RESULT -->
@@ -494,22 +260,18 @@
         <p class="color-name" id="colorName"></p>
         <p class="color-root" id="colorRoot"></p>
       </div>
-
       <div class="message-card">
-        <p class="msg-label">🌙 Poetic healing</p>
+        <p class="msg-label">🌹 Little Prince healing</p>
         <p class="msg-text" id="poeticMsg"></p>
       </div>
-
       <div class="message-card">
         <p class="msg-label">🧠 What neuroscience says</p>
         <p class="msg-text" id="sciMsg"></p>
       </div>
-
       <div class="message-card">
         <p class="msg-label">🤍 In silence</p>
         <p class="msg-text" id="silentMsg"></p>
       </div>
-
       <div class="number-card">
         <p class="num-label">Today's numerology number</p>
         <p class="num-big" id="numBig"></p>
@@ -519,79 +281,137 @@
 
       <!-- EMAIL -->
       <div class="email-section" id="emailSection">
-        <p class="email-title">✨ Almost there</p>
-        <p class="email-sub">Receive your healing color, purification message and numerology reading by email. Moru will deliver it personally.</p>
-        <input type="email" id="emailInput" placeholder="Enter your email address">
-        <div class="sent-success" id="sentSuccess">📬 Email sent! Please check your inbox.</div>
+        <p class="email-title">✨ Keep this with you</p>
+        <p class="email-sub">Enter your email — Moru will send your healing results, and your personal healing card will be ready to save.</p>
+        <input type="email" id="emailInput" placeholder="Your email address">
         <button class="btn-send" onclick="sendEmail()" id="sendBtn">Send my healing results 💜</button>
-        <p class="privacy">Your email is used only to deliver your healing results</p>
+        <p class="privacy">Your email is used only to deliver your healing results.</p>
       </div>
     </div>
 
     <!-- THANK YOU -->
     <div class="thankyou" id="thankyouSection">
       <div class="ty-card">
-        <p style="font-size:40px; margin-bottom:16px;">🐰</p>
-        <p class="ty-title">Thank you ♡</p>
-        <p class="ty-sub">Your healing is on its way. Moru is proud of you for taking one step toward peace.</p>
+        <p style="font-size:44px;margin-bottom:16px;">🐰</p>
+        <p class="ty-title">Your healing is on its way ♡</p>
+        <p class="ty-sub">Moru has carried your anxiety into the light.<br>Check your inbox — something gentle is waiting.</p>
       </div>
 
-      <div class="upsell-card">
-        <p class="upsell-badge">✦ Special Offer ✦</p>
-        <p class="upsell-title">Deep Healing Package</p>
-        <p class="upsell-desc">A deeper healing journey with Moru — a personalized program made just for you.</p>
-        <ul class="features">
-          <li>7-day healing meditation plan</li>
-          <li>Personalized color therapy guide</li>
-          <li>Extended purification ritual</li>
-          <li>Personalized healing affirmations</li>
-        </ul>
-        <div class="price-row">
-          <p class="price">$19</p>
-          <p class="price-sub">one-time payment</p>
+      <!-- DOWNLOAD SECTION -->
+      <div class="download-section" id="downloadSection">
+        <div class="download-prompt">
+          <p>✦ Your healing card is ready ✦</p>
+          <h3>Save it and carry it with you</h3>
         </div>
-        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5" class="btn-upsell" target="_blank">Open the door to deeper healing ✨</a>
+
+        <!-- THE CARD -->
+        <div id="healingCard">
+          <p class="card-brand">ANXIETY TRANSLATOR · by MAMARU</p>
+          <div class="card-color-ball" id="cardColorBall"></div>
+          <p class="card-color-name" id="cardColorName"></p>
+          <p class="card-root" id="cardRoot"></p>
+          <div class="card-divider"></div>
+          <p class="card-poetic" id="cardPoetic"></p>
+          <div class="card-divider"></div>
+          <p class="card-num" id="cardNum"></p>
+          <p class="card-num-meaning" id="cardNumMeaning"></p>
+          <p class="card-num-msg" id="cardNumMsg"></p>
+          <p class="card-footer">@anxiety_translator</p>
+        </div>
+
+        <button class="btn-download" onclick="downloadCard()">
+          ↓ Save my healing card
+        </button>
+      </div>
+
+      <!-- UPSELL -->
+      <div class="upsell-card">
+        <p class="upsell-badge">✦ One-time offer ✦</p>
+        <p class="upsell-title">Anxiety Translator VIP Pass</p>
+        <p class="upsell-desc">A deeper healing journey with Moru — crafted just for you.</p>
+        <ul class="features">
+          <li>7-day personalized healing meditation plan</li>
+          <li>Color therapy guide for your anxiety type</li>
+          <li>Extended purification ritual</li>
+          <li>Daily healing affirmations from Moru</li>
+        </ul>
+        <p class="price-original">$49</p>
+        <p class="price-sale">$19</p>
+        <span class="price-tag">✦ 61% OFF — TODAY ONLY ✦</span>
+        <p class="price-sub">one-time payment · instant access</p>
+        <div class="countdown-wrap">
+          <p class="countdown-label">This offer expires in</p>
+          <p class="countdown-timer" id="countdown">15:00</p>
+        </div>
+        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5"
+           class="btn-upsell" target="_blank">
+          Get My Full Healing Report ($19) ✨
+        </a>
         <button class="btn-reset" onclick="resetApp()">Start again</button>
       </div>
     </div>
 
   </div>
-
   <footer>Anxiety Translator by MAMARU · @anxiety_translator</footer>
 </div>
 
 <script>
-  const API_URL = "";
   let analysisResult = null;
+  let countdownInterval = null;
+
+  // Empathy lines matched to keywords
+  const EMPATHY_LINES = [
+    { keys: ['message','text','read','reply','chat','left','seen'], line: '"Moru knows the weight of waiting for a message that hasn\'t come yet..."' },
+    { keys: ['job','work','career','fail','interview','fired','boss'], line: '"Moru sees how hard you have been trying, even when no one is watching..."' },
+    { keys: ['money','broke','debt','bill','rent','salary'], line: '"Moru knows the quiet fear that lives in numbers at 3am..."' },
+    { keys: ['alone','lonely','nobody','empty','lost','meaningless'], line: '"Even the stars feel lonely sometimes. Moru is here with you now..."' },
+    { keys: ['exam','study','grade','test','school'], line: '"Moru sees the light you kept on when everyone else went to sleep..."' },
+    { keys: ['family','parent','mom','dad','home'], line: '"The heaviest weight is the love we carry for those we cannot reach..."' },
+  ];
+
+  function getEmpathyLine(text) {
+    const lower = text.toLowerCase();
+    for (const e of EMPATHY_LINES) {
+      if (e.keys.some(k => lower.includes(k))) return e.line;
+    }
+    return '"Moru is holding your words gently. The translation has begun..."';
+  }
 
   function updateCount() {
-    const ta = document.getElementById('anxietyText');
-    document.getElementById('charCount').textContent = ta.value.length;
+    document.getElementById('charCount').textContent = document.getElementById('anxietyText').value.length;
+  }
+
+  function startRitualSteps() {
+    const steps = document.querySelectorAll('#ritualSteps li');
+    steps.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 1800));
   }
 
   async function startTranslation() {
     const text = document.getElementById('anxietyText').value.trim();
-    if (!text) { alert('Please enter your anxiety'); return; }
+    if (!text) { alert('Please share what is on your mind.'); return; }
 
     document.getElementById('inputSection').style.display = 'none';
     document.getElementById('loadingSection').classList.add('active');
 
+    // Show empathy line immediately
+    document.getElementById('empathyLine').textContent = getEmpathyLine(text);
+    startRitualSteps();
+
     try {
-      const res = await fetch(`/api/translate`, {
+      const res = await fetch('/api/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ anxiety: text, email: 'temp@temp.com' })
       });
       const data = await res.json();
-
       if (!data.success) throw new Error(data.error);
-
       analysisResult = data;
 
+      // Populate result
       document.getElementById('colorBall').style.background = data.color.hex;
-      document.getElementById('colorBall').style.boxShadow = `0 0 40px ${data.color.hex}66`;
-      document.getElementById('colorName').textContent = `${data.color.emoji} Your healing color today is ${data.color.name}`;
-      document.getElementById('colorRoot').textContent = data.root;
+      document.getElementById('colorBall').style.boxShadow = `0 0 50px ${data.color.hex}88`;
+      document.getElementById('colorName').textContent = `${data.color.emoji} Your healing color is ${data.color.name}`;
+      document.getElementById('colorRoot').textContent = data.root || '';
       document.getElementById('poeticMsg').textContent = data.poetic;
       document.getElementById('sciMsg').textContent = data.scientific;
       document.getElementById('silentMsg').textContent = data.silent;
@@ -599,49 +419,97 @@
       document.getElementById('numMeaning').textContent = data.numberInfo.meaning;
       document.getElementById('numMsg').textContent = data.numberInfo.message;
 
+      // Pre-populate healing card
+      document.getElementById('cardColorBall').style.background = data.color.hex;
+      document.getElementById('cardColorBall').style.boxShadow = `0 0 30px ${data.color.hex}88`;
+      document.getElementById('cardColorName').textContent = `${data.color.emoji} ${data.color.name}`;
+      document.getElementById('cardRoot').textContent = data.root || '';
+      document.getElementById('cardPoetic').textContent = data.poetic;
+      document.getElementById('cardNum').textContent = data.number;
+      document.getElementById('cardNumMeaning').textContent = data.numberInfo.meaning;
+      document.getElementById('cardNumMsg').textContent = data.numberInfo.message;
+
       document.getElementById('loadingSection').classList.remove('active');
       document.getElementById('resultSection').classList.add('active');
 
     } catch (err) {
       document.getElementById('loadingSection').classList.remove('active');
       document.getElementById('inputSection').style.display = 'block';
-      alert('An error occurred. Please try again.');
+      alert('Something went wrong. Please try again.');
     }
   }
 
   async function sendEmail() {
     const email = document.getElementById('emailInput').value.trim();
-    if (!email) { alert('Please enter your email'); return; }
+    if (!email) { alert('Please enter your email address.'); return; }
 
     const btn = document.getElementById('sendBtn');
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
     const text = document.getElementById('anxietyText').value.trim();
-
     try {
-      const res = await fetch(`/api/translate`, {
+      const res = await fetch('/api/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ anxiety: text, email })
       });
       const data = await res.json();
-
       if (data.success) {
-        document.getElementById('emailSection').style.display = 'none';
         document.getElementById('resultSection').classList.remove('active');
         document.getElementById('thankyouSection').classList.add('active');
+        startCountdown(15 * 60);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(data.error);
       }
     } catch (err) {
       btn.disabled = false;
       btn.textContent = 'Send my healing results 💜';
-      alert('An error occurred. Please try again.');
+      alert('Something went wrong. Please try again.');
     }
   }
 
+  async function downloadCard() {
+    const card = document.getElementById('healingCard');
+    const btn = document.querySelector('.btn-download');
+    btn.textContent = 'Preparing your card...';
+    btn.disabled = true;
+    try {
+      const canvas = await html2canvas(card, {
+        backgroundColor: '#06030f',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = 'moru-healing-card.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      btn.textContent = '✓ Saved!';
+    } catch (e) {
+      btn.textContent = '↓ Save my healing card';
+      btn.disabled = false;
+    }
+  }
+
+  function startCountdown(seconds) {
+    if (countdownInterval) clearInterval(countdownInterval);
+    let remaining = seconds;
+    function tick() {
+      const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+      const s = (remaining % 60).toString().padStart(2, '0');
+      const el = document.getElementById('countdown');
+      if (el) el.textContent = `${m}:${s}`;
+      if (remaining <= 0) { clearInterval(countdownInterval); if (el) el.textContent = 'Expired'; }
+      remaining--;
+    }
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+  }
+
   function resetApp() {
+    if (countdownInterval) clearInterval(countdownInterval);
     document.getElementById('inputSection').style.display = 'block';
     document.getElementById('resultSection').classList.remove('active');
     document.getElementById('thankyouSection').classList.remove('active');
@@ -650,6 +518,8 @@
     document.getElementById('charCount').textContent = '0';
     document.getElementById('sendBtn').disabled = false;
     document.getElementById('sendBtn').textContent = 'Send my healing results 💜';
+    document.getElementById('empathyLine').textContent = '';
+    document.querySelectorAll('#ritualSteps li').forEach(el => el.classList.remove('visible'));
     window.scrollTo(0, 0);
   }
 </script>
