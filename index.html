@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anxiety Translator by MAMARU</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#9B59B6">
+<link rel="apple-touch-icon" href="/moru.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Anxiety Translator">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -49,6 +55,17 @@
   .subtitle { color: var(--muted); font-size: 15px; line-height: 1.9; font-weight: 300; }
 
   .main-card { max-width: 500px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ALREADY USED LOCK SCREEN */
+  .used-lock { display: none; }
+  .used-lock.active { display: block; }
+  .used-lock-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 36px 28px; text-align: center; margin-bottom: 16px; animation: fadeUp 0.6s ease;
+  }
+  .used-lock-icon { font-size: 44px; margin-bottom: 16px; }
+  .used-lock-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--purple-light); margin-bottom: 12px; font-weight: 300; }
+  .used-lock-sub { color: var(--muted); font-size: 14px; line-height: 1.9; font-style: italic; margin-bottom: 4px; }
 
   /* INPUT */
   .input-section { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; }
@@ -101,6 +118,16 @@
   .ritual-steps { list-style: none; margin: 0; }
   .ritual-steps li { color: var(--muted); font-size: 13px; line-height: 2.2; opacity: 0; transition: opacity 0.8s ease; }
   .ritual-steps li.visible { opacity: 1; }
+
+  .ritual-ps {
+    color: var(--gold); font-size: 11px; font-style: italic; letter-spacing: 0.5px;
+    margin-top: 20px; opacity: 0; animation: psBlink 1.8s ease-in-out infinite;
+    animation-delay: 7.5s; animation-fill-mode: forwards;
+  }
+  @keyframes psBlink {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.9; }
+  }
 
   /* RESULT */
   .result { display: none; }
@@ -212,6 +239,27 @@
   .btn-reset:hover { border-color: var(--purple); color: var(--purple-light); }
 
   footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; opacity: 0.5; }
+
+  /* HOME SCREEN PROMPT MODAL */
+  .hs-overlay {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(6,3,15,0.85); align-items: center; justify-content: center; padding: 20px;
+  }
+  .hs-overlay.active { display: flex; }
+  .hs-modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 28px; max-width: 380px; text-align: center; animation: fadeUp 0.4s ease;
+  }
+  .hs-icon { width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 16px; display: block; }
+  .hs-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--purple-light); margin-bottom: 10px; font-weight: 300; }
+  .hs-text { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 18px; }
+  .hs-text b { color: var(--text); }
+  .hs-close {
+    background: linear-gradient(135deg, #6a3d9a, #9B59B6); border: none; border-radius: 50px;
+    color: white; padding: 12px 28px; font-size: 14px; font-family: 'Noto Sans', sans-serif;
+    cursor: pointer; width: 100%;
+  }
+  .hs-skip { color: var(--muted); font-size: 12px; margin-top: 10px; cursor: pointer; text-decoration: underline; opacity: 0.7; }
 </style>
 </head>
 <body>
@@ -219,13 +267,45 @@
 <div class="glow-bg"></div>
 <div class="page">
   <header>
-    <img src="moru.png" alt="Moru" class="moru-img" onerror="this.style.display='none'">
+    <img src="moru.jpg" alt="Moru" class="moru-img" onerror="this.style.display='none'">
     <p class="brand">by MAMARU</p>
     <h1>Anxiety Translator</h1>
     <p class="subtitle">Tell Moru what is weighing on you.<br>A healing color will find you.</p>
   </header>
 
   <div class="main-card">
+
+    <!-- ALREADY USED LOCK SCREEN -->
+    <div class="used-lock" id="usedLockSection">
+      <div class="used-lock-card">
+        <p class="used-lock-icon">🐰</p>
+        <p class="used-lock-title">Moru already translated your anxiety once</p>
+        <p class="used-lock-sub">Your free translation has been used.<br>Unlock unlimited access to keep going deeper with Moru.</p>
+      </div>
+      <div class="upsell-card">
+        <p class="upsell-badge">✦ One-time offer ✦</p>
+        <p class="upsell-title">Anxiety Translator VIP Pass</p>
+        <p class="upsell-desc">Unlimited translations, anytime your anxiety speaks.</p>
+        <ul class="features">
+          <li>Unlimited anxiety translations, every day</li>
+          <li>Extended Little Prince story for your anxiety</li>
+          <li>Deeper numerology reading — full meaning unlocked</li>
+          <li>High-resolution healing card, no limits</li>
+        </ul>
+        <p class="price-original">$49</p>
+        <p class="price-sale">$19</p>
+        <span class="price-tag">✦ 61% OFF — TODAY ONLY ✦</span>
+        <p class="price-sub">one-time payment · instant access</p>
+        <div class="countdown-wrap">
+          <p class="countdown-label">This offer expires in</p>
+          <p class="countdown-timer" id="countdownLock">15:00</p>
+        </div>
+        <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5"
+           class="btn-upsell" target="_blank" onclick="showHomeScreenPrompt()">
+          Get My Full Healing Report ($19) ✨
+        </a>
+      </div>
+    </div>
 
     <!-- INPUT -->
     <div id="inputSection">
@@ -251,6 +331,7 @@
         <li>✨ Reading today's numerology energy...</li>
         <li>🐰 Preparing your purification message...</li>
       </ul>
+      <p class="ritual-ps">P.S. the neuroscience switch that calms your anxiety is about to be revealed...</p>
     </div>
 
     <!-- RESULT -->
@@ -328,12 +409,12 @@
       <div class="upsell-card">
         <p class="upsell-badge">✦ One-time offer ✦</p>
         <p class="upsell-title">Anxiety Translator VIP Pass</p>
-        <p class="upsell-desc">A deeper healing journey with Moru — crafted just for you.</p>
+        <p class="upsell-desc">You've felt how Moru translates anxiety once. Unlock unlimited access, anytime it returns.</p>
         <ul class="features">
-          <li>7-day personalized healing meditation plan</li>
-          <li>Color therapy guide for your anxiety type</li>
-          <li>Extended purification ritual</li>
-          <li>Daily healing affirmations from Moru</li>
+          <li>Unlimited anxiety translations, every day</li>
+          <li>Extended Little Prince story for your anxiety</li>
+          <li>Deeper numerology reading — full meaning unlocked</li>
+          <li>High-resolution healing card, no limits</li>
         </ul>
         <p class="price-original">$49</p>
         <p class="price-sale">$19</p>
@@ -344,7 +425,7 @@
           <p class="countdown-timer" id="countdown">15:00</p>
         </div>
         <a href="https://anxiety-translator.lemonsqueezy.com/checkout/buy/bd63db8b-d363-4e3f-a56d-25df86133fb5"
-           class="btn-upsell" target="_blank">
+           class="btn-upsell" target="_blank" onclick="showHomeScreenPrompt()">
           Get My Full Healing Report ($19) ✨
         </a>
         <button class="btn-reset" onclick="resetApp()">Start again</button>
@@ -355,9 +436,30 @@
   <footer>Anxiety Translator by MAMARU · @anxiety_translator</footer>
 </div>
 
+<!-- HOME SCREEN INSTALL PROMPT -->
+<div class="hs-overlay" id="hsOverlay">
+  <div class="hs-modal">
+    <img src="/moru.png" alt="Moru" class="hs-icon" onerror="this.style.display='none'">
+    <p class="hs-title">Keep Moru close to you</p>
+    <p class="hs-text" id="hsText">Add Anxiety Translator to your home screen so Moru is always one tap away.</p>
+    <button class="hs-close" onclick="closeHomeScreenPrompt()">Got it</button>
+    <p class="hs-skip" onclick="closeHomeScreenPrompt()">Maybe later</p>
+  </div>
+</div>
+
 <script>
   let analysisResult = null;
   let countdownInterval = null;
+  const STORAGE_KEY = 'moru_translated_once';
+
+  // Check on load: has this browser already used the free translation?
+  (function checkUsage() {
+    if (localStorage.getItem(STORAGE_KEY) === 'true') {
+      document.getElementById('inputSection').style.display = 'none';
+      document.getElementById('usedLockSection').classList.add('active');
+      startCountdown(15 * 60, 'countdownLock');
+    }
+  })();
 
   // Empathy lines matched to keywords
   const EMPATHY_LINES = [
@@ -456,6 +558,7 @@
       });
       const data = await res.json();
       if (data.success) {
+        localStorage.setItem(STORAGE_KEY, 'true');
         document.getElementById('resultSection').classList.remove('active');
         document.getElementById('thankyouSection').classList.add('active');
         startCountdown(15 * 60);
@@ -482,9 +585,48 @@
         useCORS: true,
         logging: false,
       });
+
+      // Add viral watermark strip at the bottom
+      const ctx = canvas.getContext('2d');
+      const stripHeight = 64;
+      const totalHeight = canvas.height + stripHeight;
+
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = canvas.width;
+      finalCanvas.height = totalHeight;
+      const fctx = finalCanvas.getContext('2d');
+
+      // Draw original card
+      fctx.fillStyle = '#06030f';
+      fctx.fillRect(0, 0, finalCanvas.width, totalHeight);
+      fctx.drawImage(canvas, 0, 0);
+
+      // Draw watermark strip
+      fctx.fillStyle = '#0d0820';
+      fctx.fillRect(0, canvas.height, finalCanvas.width, stripHeight);
+      fctx.strokeStyle = 'rgba(155,89,182,0.25)';
+      fctx.lineWidth = 1;
+      fctx.beginPath();
+      fctx.moveTo(0, canvas.height);
+      fctx.lineTo(finalCanvas.width, canvas.height);
+      fctx.stroke();
+
+      fctx.textAlign = 'center';
+      fctx.textBaseline = 'middle';
+      const centerY = canvas.height + stripHeight / 2;
+      const scale = canvas.width / 580; // approximate scale factor
+
+      fctx.fillStyle = '#E8D5FF';
+      fctx.font = `${Math.round(15 * scale)}px Georgia, serif`;
+      fctx.fillText('🐰  Translate your anxiety at', finalCanvas.width / 2, centerY - 10 * scale);
+
+      fctx.fillStyle = '#B89FD8';
+      fctx.font = `${Math.round(14 * scale)}px Georgia, serif`;
+      fctx.fillText('anxiety-translator.vercel.app', finalCanvas.width / 2, centerY + 12 * scale);
+
       const link = document.createElement('a');
       link.download = 'moru-healing-card.png';
-      link.href = canvas.toDataURL('image/png');
+      link.href = finalCanvas.toDataURL('image/png');
       link.click();
       btn.textContent = '✓ Saved!';
     } catch (e) {
@@ -493,13 +635,14 @@
     }
   }
 
-  function startCountdown(seconds) {
+  function startCountdown(seconds, elementId) {
+    elementId = elementId || 'countdown';
     if (countdownInterval) clearInterval(countdownInterval);
     let remaining = seconds;
     function tick() {
       const m = Math.floor(remaining / 60).toString().padStart(2, '0');
       const s = (remaining % 60).toString().padStart(2, '0');
-      const el = document.getElementById('countdown');
+      const el = document.getElementById(elementId);
       if (el) el.textContent = `${m}:${s}`;
       if (remaining <= 0) { clearInterval(countdownInterval); if (el) el.textContent = 'Expired'; }
       remaining--;
@@ -521,6 +664,27 @@
     document.getElementById('empathyLine').textContent = '';
     document.querySelectorAll('#ritualSteps li').forEach(el => el.classList.remove('visible'));
     window.scrollTo(0, 0);
+  }
+
+  function showHomeScreenPrompt() {
+    const ua = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+    const isAndroid = /Android/.test(ua);
+    const hsText = document.getElementById('hsText');
+
+    if (isIOS) {
+      hsText.innerHTML = 'While your payment opens in a new tab — tap the <b>Share</b> button below, then <b>"Add to Home Screen"</b> so Moru is always one tap away.';
+    } else if (isAndroid) {
+      hsText.innerHTML = 'While your payment opens in a new tab — tap your browser menu (⋮) and choose <b>"Add to Home Screen"</b> so Moru is always one tap away.';
+    } else {
+      hsText.innerHTML = 'Your payment is opening in a new tab. Come back here anytime — bookmark this page to keep Moru close.';
+    }
+
+    document.getElementById('hsOverlay').classList.add('active');
+  }
+
+  function closeHomeScreenPrompt() {
+    document.getElementById('hsOverlay').classList.remove('active');
   }
 </script>
 </body>
