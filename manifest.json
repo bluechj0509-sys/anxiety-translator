@@ -1,0 +1,24 @@
+{
+  "name": "Anxiety Translator by MAMARU",
+  "short_name": "Anxiety Translator",
+  "description": "Tell Moru what is weighing on you. A healing color will find you.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06030f",
+  "theme_color": "#9B59B6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/moru.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/moru.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
