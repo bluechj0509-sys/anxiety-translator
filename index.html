@@ -122,7 +122,7 @@
   .ritual-ps {
     color: var(--gold); font-size: 11px; font-style: italic; letter-spacing: 0.5px;
     margin-top: 20px; opacity: 0; animation: psBlink 1.8s ease-in-out infinite;
-    animation-delay: 7.5s; animation-fill-mode: forwards;
+    animation-delay: 3.5s; animation-fill-mode: forwards;
   }
   @keyframes psBlink {
     0%, 100% { opacity: 0.35; }
@@ -653,7 +653,6 @@
 
   function resetApp() {
     if (countdownInterval) clearInterval(countdownInterval);
-    document.getElementById('inputSection').style.display = 'block';
     document.getElementById('resultSection').classList.remove('active');
     document.getElementById('thankyouSection').classList.remove('active');
     document.getElementById('anxietyText').value = '';
@@ -663,6 +662,15 @@
     document.getElementById('sendBtn').textContent = 'Send my healing results 💜';
     document.getElementById('empathyLine').textContent = '';
     document.querySelectorAll('#ritualSteps li').forEach(el => el.classList.remove('visible'));
+
+    // If already used, show the lock screen instead of letting them retry for free
+    if (localStorage.getItem(STORAGE_KEY) === 'true') {
+      document.getElementById('inputSection').style.display = 'none';
+      document.getElementById('usedLockSection').classList.add('active');
+      startCountdown(15 * 60, 'countdownLock');
+    } else {
+      document.getElementById('inputSection').style.display = 'block';
+    }
     window.scrollTo(0, 0);
   }
 
